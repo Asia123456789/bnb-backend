@@ -2,15 +2,18 @@ import { Hono } from "hono";
 import { serve } from "@hono/node-server";
 import dotenv from "dotenv";
 
+import { optionalAuth } from "./middleware/auth.js";
+import { propertyApp } from "./routes/properties.js";
+import { bookingApp } from "./routes/bookings.js";
+
 dotenv.config();
 
 const app = new Hono();
 
-app.get("/", (c) => c.text("Backend running ✅"));
+app.use("*", optionalAuth); // autentisering via Supabase
+app.route("/properties", propertyApp);
+app.route("/bookings", bookingApp);
 
-serve({
-  fetch: app.fetch,
-  port: 3000,
+serve({ fetch: app.fetch, port: Number(process.env.HONO_PORT) || 3000 }, (info) => {
+  console.log(`🚀 Server running on http://localhost:${info.port}`);
 });
-
-console.log("Server running at http://localhost:3000 🚀");
