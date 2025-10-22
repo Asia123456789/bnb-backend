@@ -1,15 +1,15 @@
 import { createClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
+
 dotenv.config();
 
-const _supabaseUrl = process.env.SUPABASE_URL;
-const _supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+const _supabaseUrl = process.env.SUPABASE_URL as string;
+const _supabaseAnonKey = process.env.SUPABASE_ANON_KEY as string;
 
 if (!_supabaseUrl || !_supabaseAnonKey) {
-  throw new Error("Supabase not initialized. Add SUPABASE_URL and SUPABASE_ANON_KEY to .env");
+  throw new Error("Missing Supabase credentials in .env");
 }
 
 export const supabase = createClient(_supabaseUrl, _supabaseAnonKey);
-
-export const supabaseUrl = _supabaseUrl as string;
-export const supabaseAnonKey = _supabaseAnonKey as string;
+export const supabaseUrl = _supabaseUrl;
+export const supabaseAnonKey = _supabaseAnonKey;
